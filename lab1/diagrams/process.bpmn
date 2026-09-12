@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
-                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
-                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
-                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
-                  id="Definitions_CreditApplication"
-                  targetNamespace="http://bpmn.io/schema/bpmn">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_CreditApplication" targetNamespace="http://bpmn.io/schema/bpmn" exporter="bpmn-js (https://demo.bpmn.io)" exporterVersion="18.28.0">
   <bpmn:collaboration id="Collaboration_1">
     <bpmn:participant id="Participant_Bank" name="Обработка заявки на кредит" processRef="Process_Credit" />
   </bpmn:collaboration>
@@ -16,8 +11,6 @@
         <bpmn:flowNodeRef>Task_Sign</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_Manager" name="Кредитный менеджер">
-        <bpmn:flowNodeRef>Task_Register</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Task_CheckDocs</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_Docs</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_RequestDocs</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_Split</bpmn:flowNodeRef>
@@ -29,6 +22,9 @@
         <bpmn:flowNodeRef>Task_PrepareContract</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Task_NotifyIssued</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_Success</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0oadyas</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Register</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CheckDocs</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_Scoring" name="Скоринговая система">
         <bpmn:flowNodeRef>Task_Score</bpmn:flowNodeRef>
@@ -38,22 +34,12 @@
         <bpmn:flowNodeRef>Task_OpenAccount</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-
     <bpmn:startEvent id="StartEvent_1" name="Заявка подана">
       <bpmn:outgoing>Flow_01</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:task id="Task_Submit" name="Подать заявку на кредит">
       <bpmn:incoming>Flow_01</bpmn:incoming>
       <bpmn:outgoing>Flow_02</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:task id="Task_Register" name="Зарегистрировать заявку">
-      <bpmn:incoming>Flow_02</bpmn:incoming>
-      <bpmn:outgoing>Flow_03</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:task id="Task_CheckDocs" name="Проверить комплектность документов">
-      <bpmn:incoming>Flow_03</bpmn:incoming>
-      <bpmn:incoming>Flow_07</bpmn:incoming>
-      <bpmn:outgoing>Flow_04</bpmn:outgoing>
     </bpmn:task>
     <bpmn:exclusiveGateway id="Gateway_Docs" name="Документы полные?">
       <bpmn:incoming>Flow_04</bpmn:incoming>
@@ -117,10 +103,9 @@
     <bpmn:endEvent id="EndEvent_Success" name="Кредит выдан">
       <bpmn:incoming>Flow_20</bpmn:incoming>
     </bpmn:endEvent>
-
     <bpmn:sequenceFlow id="Flow_01" sourceRef="StartEvent_1" targetRef="Task_Submit" />
     <bpmn:sequenceFlow id="Flow_02" sourceRef="Task_Submit" targetRef="Task_Register" />
-    <bpmn:sequenceFlow id="Flow_03" sourceRef="Task_Register" targetRef="Task_CheckDocs" />
+    <bpmn:sequenceFlow id="Flow_03" sourceRef="Task_Register" targetRef="Activity_0oadyas" />
     <bpmn:sequenceFlow id="Flow_04" sourceRef="Task_CheckDocs" targetRef="Gateway_Docs" />
     <bpmn:sequenceFlow id="Flow_05" name="Да" sourceRef="Gateway_Docs" targetRef="Gateway_Split" />
     <bpmn:sequenceFlow id="Flow_06" name="Нет" sourceRef="Gateway_Docs" targetRef="Task_RequestDocs" />
@@ -138,26 +123,38 @@
     <bpmn:sequenceFlow id="Flow_18" sourceRef="Task_Sign" targetRef="Task_OpenAccount" />
     <bpmn:sequenceFlow id="Flow_19" sourceRef="Task_OpenAccount" targetRef="Task_NotifyIssued" />
     <bpmn:sequenceFlow id="Flow_20" sourceRef="Task_NotifyIssued" targetRef="EndEvent_Success" />
+    <bpmn:task id="Activity_0oadyas" name="Проверить корректность заполнения анкеты">
+      <bpmn:incoming>Flow_03</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ngdf7s</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0ngdf7s" sourceRef="Activity_0oadyas" targetRef="Task_CheckDocs" />
+    <bpmn:task id="Task_Register" name="Зарегистрировать заявку">
+      <bpmn:incoming>Flow_02</bpmn:incoming>
+      <bpmn:outgoing>Flow_03</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_CheckDocs" name="Проверить комплектность документов">
+      <bpmn:incoming>Flow_07</bpmn:incoming>
+      <bpmn:incoming>Flow_0ngdf7s</bpmn:incoming>
+      <bpmn:outgoing>Flow_04</bpmn:outgoing>
+    </bpmn:task>
   </bpmn:process>
-
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
       <bpmndi:BPMNShape id="Participant_Bank_di" bpmnElement="Participant_Bank" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="1990" height="615" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_Client_di" bpmnElement="Lane_Client" isHorizontal="true">
-        <dc:Bounds x="190" y="80" width="1960" height="125" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_Manager_di" bpmnElement="Lane_Manager" isHorizontal="true">
-        <dc:Bounds x="190" y="205" width="1960" height="240" />
+      <bpmndi:BPMNShape id="Lane_Core_di" bpmnElement="Lane_Core" isHorizontal="true">
+        <dc:Bounds x="190" y="570" width="1960" height="125" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_Scoring_di" bpmnElement="Lane_Scoring" isHorizontal="true">
         <dc:Bounds x="190" y="445" width="1960" height="125" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_Core_di" bpmnElement="Lane_Core" isHorizontal="true">
-        <dc:Bounds x="190" y="570" width="1960" height="125" />
+      <bpmndi:BPMNShape id="Lane_Manager_di" bpmnElement="Lane_Manager" isHorizontal="true">
+        <dc:Bounds x="190" y="205" width="1960" height="240" />
       </bpmndi:BPMNShape>
-
+      <bpmndi:BPMNShape id="Lane_Client_di" bpmnElement="Lane_Client" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1960" height="125" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
         <dc:Bounds x="232" y="124" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -166,15 +163,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_Submit_di" bpmnElement="Task_Submit">
         <dc:Bounds x="300" y="102" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_Sign_di" bpmnElement="Task_Sign">
-        <dc:Bounds x="1600" y="102" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_Register_di" bpmnElement="Task_Register">
-        <dc:Bounds x="450" y="225" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_CheckDocs_di" bpmnElement="Task_CheckDocs">
-        <dc:Bounds x="600" y="225" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_Docs_di" bpmnElement="Gateway_Docs" isMarkerVisible="true">
         <dc:Bounds x="750" y="240" width="50" height="50" />
@@ -224,6 +212,9 @@
       <bpmndi:BPMNShape id="Task_PrepareContract_di" bpmnElement="Task_PrepareContract">
         <dc:Bounds x="1450" y="225" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Sign_di" bpmnElement="Task_Sign">
+        <dc:Bounds x="1600" y="102" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_OpenAccount_di" bpmnElement="Task_OpenAccount">
         <dc:Bounds x="1750" y="592" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -236,7 +227,16 @@
           <dc:Bounds x="2035" y="290" width="71" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-
+      <bpmndi:BPMNShape id="Activity_0oadyas_di" bpmnElement="Activity_0oadyas">
+        <dc:Bounds x="530" y="225" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Register_di" bpmnElement="Task_Register">
+        <dc:Bounds x="410" y="225" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CheckDocs_di" bpmnElement="Task_CheckDocs">
+        <dc:Bounds x="640" y="225" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01">
         <di:waypoint x="268" y="142" />
         <di:waypoint x="300" y="142" />
@@ -244,14 +244,16 @@
       <bpmndi:BPMNEdge id="Flow_02_di" bpmnElement="Flow_02">
         <di:waypoint x="350" y="182" />
         <di:waypoint x="350" y="265" />
-        <di:waypoint x="450" y="265" />
+        <di:waypoint x="410" y="265" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_di" bpmnElement="Flow_03">
-        <di:waypoint x="550" y="265" />
-        <di:waypoint x="600" y="265" />
+        <di:waypoint x="460" y="225" />
+        <di:waypoint x="460" y="205" />
+        <di:waypoint x="580" y="205" />
+        <di:waypoint x="580" y="225" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_di" bpmnElement="Flow_04">
-        <di:waypoint x="700" y="265" />
+        <di:waypoint x="740" y="265" />
         <di:waypoint x="750" y="265" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05_di" bpmnElement="Flow_05">
@@ -271,7 +273,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_07_di" bpmnElement="Flow_07">
         <di:waypoint x="650" y="345" />
-        <di:waypoint x="650" y="305" />
+        <di:waypoint x="650" y="325" />
+        <di:waypoint x="690" y="325" />
+        <di:waypoint x="690" y="305" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_di" bpmnElement="Flow_08">
         <di:waypoint x="875" y="290" />
@@ -337,6 +341,12 @@
       <bpmndi:BPMNEdge id="Flow_20_di" bpmnElement="Flow_20">
         <di:waypoint x="2000" y="265" />
         <di:waypoint x="2052" y="265" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ngdf7s_di" bpmnElement="Flow_0ngdf7s">
+        <di:waypoint x="580" y="225" />
+        <di:waypoint x="580" y="205" />
+        <di:waypoint x="690" y="205" />
+        <di:waypoint x="690" y="225" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
