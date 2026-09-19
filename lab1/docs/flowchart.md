@@ -7,13 +7,10 @@
 flowchart TD
     Start([Начало: получены данные заявителя]) --> Input[/Ввод: рейтинг, история, доход, сумма кредита/]
     Input --> CalcLoad[Рассчитать долговую нагрузку:<br/>платёж / доход * 100%]
-    CalcLoad --> CheckHistory{Есть просрочки<br/>более 90 дней?}
+    CalcLoad --> CheckAge{Возраст в диапазоне<br/>21-65 лет?}
 
-    CalcLoad --> CheckHistory{Есть просрочки<br/>более 90 дней?}
-+   CalcLoad --> CheckAge{Возраст в диапазоне<br/>21-65 лет?}
-+
-+   CheckAge -- Нет --> Reject
-+   CheckAge -- Да --> CheckHistory{Есть просрочки<br/>более 90 дней?}
+    CheckAge -- Нет --> Reject
+    CheckAge -- Да --> CheckHistory{Есть просрочки<br/>более 90 дней?}
 
     CheckHistory -- Да --> Reject[/Решение: отказ/]
     CheckHistory -- Нет --> CheckScore{Рейтинг >= 600?}
