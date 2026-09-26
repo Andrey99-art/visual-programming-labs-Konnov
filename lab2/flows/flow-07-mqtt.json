@@ -1,0 +1,121 @@
+[
+    {
+        "id": "k07tab0000000001",
+        "type": "tab",
+        "label": "07 Konnov SDP-241 | MQTT",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.7. Автор: Коннов, СДП-241 ИИ. Ветка 1: inject (5 с) -> mqtt out. Ветка 2: mqtt in -> debug. Брокер broker.hivemq.com:1883."
+    },
+    {
+        "id": "k07broker0000001",
+        "type": "mqtt-broker",
+        "name": "HiveMQ public (Konnov)",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "k07inject0000001",
+        "type": "inject",
+        "z": "k07tab0000000001",
+        "name": "Konnov: случайное значение каждые 5 с",
+        "props": [
+            {
+                "p": "payload",
+                "v": "{\"student\":\"konnov\",\"group\":\"sdp241\",\"value\":$round($random()*100),\"ts\":$now()}",
+                "vt": "jsonata"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 230,
+        "y": 80,
+        "wires": [
+            [
+                "k07mqttout00001"
+            ]
+        ]
+    },
+    {
+        "id": "k07mqttout00001",
+        "type": "mqtt out",
+        "z": "k07tab0000000001",
+        "name": "Konnov: publish student/konnov/lab2/random",
+        "topic": "student/konnov/lab2/random",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "k07broker0000001",
+        "x": 540,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "k07mqttin000001",
+        "type": "mqtt in",
+        "z": "k07tab0000000001",
+        "name": "Konnov: subscribe student/konnov/lab2/random",
+        "topic": "student/konnov/lab2/random",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "k07broker0000001",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 230,
+        "y": 180,
+        "wires": [
+            [
+                "k07debug00000001"
+            ]
+        ]
+    },
+    {
+        "id": "k07debug00000001",
+        "type": "debug",
+        "z": "k07tab0000000001",
+        "name": "debug: пришло из брокера (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 180,
+        "wires": []
+    }
+]

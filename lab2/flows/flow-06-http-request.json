@@ -1,0 +1,74 @@
+[
+    {
+        "id": "k06tab0000000001",
+        "type": "tab",
+        "label": "06 Konnov SDP-241 | HTTP Request",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.6. Автор: Коннов, СДП-241 ИИ. inject -> http request (GET https://catfact.ninja/fact, parsed JSON) -> debug."
+    },
+    {
+        "id": "k06inject0000001",
+        "type": "inject",
+        "z": "k06tab0000000001",
+        "name": "Konnov: запросить факт",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/konnov/http",
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "k06httpreq000001"
+            ]
+        ]
+    },
+    {
+        "id": "k06httpreq000001",
+        "type": "http request",
+        "z": "k06tab0000000001",
+        "name": "Konnov: GET catfact.ninja",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://catfact.ninja/fact",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 100,
+        "wires": [
+            [
+                "k06debug00000001"
+            ]
+        ]
+    },
+    {
+        "id": "k06debug00000001",
+        "type": "debug",
+        "z": "k06tab0000000001",
+        "name": "debug: ответ API (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 100,
+        "wires": []
+    }
+]

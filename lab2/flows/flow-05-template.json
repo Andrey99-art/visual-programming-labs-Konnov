@@ -1,0 +1,74 @@
+[
+    {
+        "id": "k05tab0000000001",
+        "type": "tab",
+        "label": "05 Konnov SDP-241 | Template",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.5. Автор: Коннов, СДП-241 ИИ. inject (объект) -> template (Mustache -> JSON) -> debug."
+    },
+    {
+        "id": "k05inject0000001",
+        "type": "inject",
+        "z": "k05tab0000000001",
+        "name": "Konnov: объект-источник",
+        "props": [
+            {
+                "p": "payload",
+                "v": "{\"name\":\"Konnov\",\"group\":\"SDP-241\",\"score\":6.5,\"passed\":true}",
+                "vt": "json"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/konnov/template",
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "k05template00001"
+            ]
+        ]
+    },
+    {
+        "id": "k05template00001",
+        "type": "template",
+        "z": "k05tab0000000001",
+        "name": "Konnov: Mustache -> JSON",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "mustache",
+        "template": "{\n    \"student\": \"{{payload.name}} {{payload.group}}\",\n    \"score\": {{payload.score}},\n    \"passed\": {{payload.passed}},\n    \"summary\": \"Студент {{payload.name}} ({{payload.group}}) набрал {{payload.score}} балла\"\n}",
+        "output": "parsed",
+        "x": 440,
+        "y": 100,
+        "wires": [
+            [
+                "k05debug00000001"
+            ]
+        ]
+    },
+    {
+        "id": "k05debug00000001",
+        "type": "debug",
+        "z": "k05tab0000000001",
+        "name": "debug: результат (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 100,
+        "wires": []
+    }
+]

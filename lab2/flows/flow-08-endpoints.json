@@ -1,0 +1,188 @@
+[
+    {
+        "id": "k08tab0000000001",
+        "type": "tab",
+        "label": "08 Konnov SDP-241 | Endpoints",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.8. Автор: Коннов, СДП-241 ИИ. GET /api/text, /api/info, /api/items[/:id]. Описание: lab2/docs/api.md."
+    },
+    {
+        "id": "k08httpintext001",
+        "type": "http in",
+        "z": "k08tab0000000001",
+        "name": "Konnov: GET /api/text",
+        "url": "/api/text",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 80,
+        "wires": [
+            [
+                "k08changetext001"
+            ]
+        ]
+    },
+    {
+        "id": "k08changetext001",
+        "type": "change",
+        "z": "k08tab0000000001",
+        "name": "payload = текст",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Привет от Node-RED! Коннов Андрей, СДП-241 ИИ, лаб. 2.",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 80,
+        "wires": [
+            [
+                "k08resptext0001"
+            ]
+        ]
+    },
+    {
+        "id": "k08resptext0001",
+        "type": "http response",
+        "z": "k08tab0000000001",
+        "name": "Konnov: 200 text/plain",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "text/plain; charset=utf-8"
+        },
+        "x": 650,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "k08httpininfo001",
+        "type": "http in",
+        "z": "k08tab0000000001",
+        "name": "Konnov: GET /api/info",
+        "url": "/api/info",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 180,
+        "wires": [
+            [
+                "k08changeinfo001"
+            ]
+        ]
+    },
+    {
+        "id": "k08changeinfo001",
+        "type": "change",
+        "z": "k08tab0000000001",
+        "name": "payload = JSON (2 поля)",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"student\":\"Konnov\",\"group\":\"SDP-241\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 180,
+        "wires": [
+            [
+                "k08respinfo0001"
+            ]
+        ]
+    },
+    {
+        "id": "k08respinfo0001",
+        "type": "http response",
+        "z": "k08tab0000000001",
+        "name": "Konnov: 200 application/json",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json; charset=utf-8"
+        },
+        "x": 670,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "k08httpinitems01",
+        "type": "http in",
+        "z": "k08tab0000000001",
+        "name": "Konnov: GET /api/items",
+        "url": "/api/items",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 280,
+        "wires": [
+            [
+                "k08funcitems0001"
+            ]
+        ]
+    },
+    {
+        "id": "k08httpinitemid1",
+        "type": "http in",
+        "z": "k08tab0000000001",
+        "name": "Konnov: GET /api/items/:id",
+        "url": "/api/items/:id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 340,
+        "wires": [
+            [
+                "k08funcitems0001"
+            ]
+        ]
+    },
+    {
+        "id": "k08funcitems0001",
+        "type": "function",
+        "z": "k08tab0000000001",
+        "name": "Konnov: items + валидация (200/400/404)",
+        "func": "// Лаб. 2, п. 2.8. Коннов, СДП-241 ИИ: GET /api/items и GET /api/items/:id\nconst ITEMS = [\n    { id: 1, name: \"Датчик температуры\", category: \"sensor\" },\n    { id: 2, name: \"Датчик влажности\", category: \"sensor\" },\n    { id: 3, name: \"Реле\", category: \"actuator\" },\n    { id: 4, name: \"Сервопривод\", category: \"actuator\" },\n    { id: 5, name: \"Шлюз MQTT\", category: \"gateway\" }\n];\nconst MAX_LIMIT = 100; // верхняя граница ?limit, защита от слишком больших выборок\nconst POSITIVE_INT = /^[1-9][0-9]*$/;\n\nfunction fail(status, error, message) {\n    msg.statusCode = status;\n    msg.payload = { error: error, message: message };\n    return msg;\n}\n\nconst params = msg.req.params || {};\nconst query = msg.req.query || {};\n\n// Ветка 1: путь /api/items/:id\nif (params.id !== undefined) {\n    if (!POSITIVE_INT.test(params.id)) {\n        return fail(400, \"Bad Request\", \"id должен быть положительным целым числом, получено: \" + params.id);\n    }\n    const found = ITEMS.find(function (it) { return it.id === Number(params.id); });\n    if (!found) {\n        return fail(404, \"Not Found\", \"элемент с id=\" + params.id + \" не найден\");\n    }\n    msg.statusCode = 200;\n    msg.payload = found;\n    return msg;\n}\n\n// Ветка 2: список /api/items?limit=N&category=C\nlet limit = ITEMS.length;\nif (query.limit !== undefined) {\n    if (typeof query.limit !== \"string\" || !POSITIVE_INT.test(query.limit) || Number(query.limit) > MAX_LIMIT) {\n        return fail(400, \"Bad Request\", \"limit должен быть целым числом от 1 до \" + MAX_LIMIT);\n    }\n    limit = Number(query.limit);\n}\n\nlet result = [];\nfor (let i = 0; i < ITEMS.length; i++) {\n    if (query.category !== undefined && ITEMS[i].category !== query.category) {\n        continue;\n    }\n    if (result.length >= limit) {\n        break;\n    }\n    result.push(ITEMS[i]);\n}\n\nmsg.statusCode = 200;\nmsg.payload = { count: result.length, items: result };\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 310,
+        "wires": [
+            [
+                "k08respitems0001"
+            ]
+        ]
+    },
+    {
+        "id": "k08respitems0001",
+        "type": "http response",
+        "z": "k08tab0000000001",
+        "name": "Konnov: статус из msg.statusCode",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 310,
+        "wires": []
+    }
+]
