@@ -1,0 +1,55 @@
+[
+    {
+        "id": "k01tab0000000001",
+        "type": "tab",
+        "label": "01 Konnov SDP-241 | Inject→Debug",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.1. Автор: Коннов, СДП-241 ИИ. inject каждые 5 с -> debug (complete msg)."
+    },
+    {
+        "id": "k01inject0000001",
+        "type": "inject",
+        "z": "k01tab0000000001",
+        "name": "Konnov SDP-241 каждые 5 с",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/konnov/basic",
+        "payload": "Konnov SDP-241",
+        "payloadType": "str",
+        "x": 190,
+        "y": 100,
+        "wires": [
+            [
+                "k01debug0000001"
+            ]
+        ]
+    },
+    {
+        "id": "k01debug0000001",
+        "type": "debug",
+        "z": "k01tab0000000001",
+        "name": "debug: полный msg (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 470,
+        "y": 100,
+        "wires": []
+    }
+]

@@ -1,0 +1,96 @@
+[
+    {
+        "id": "k04tab0000000001",
+        "type": "tab",
+        "label": "04 Konnov SDP-241 | Change",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.4. Автор: Коннов, СДП-241 ИИ. inject -> change (topic, timestamp, payload) -> debug (полный msg)."
+    },
+    {
+        "id": "k04inject0000001",
+        "type": "inject",
+        "z": "k04tab0000000001",
+        "name": "Konnov: исходное сообщение",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/konnov/before",
+        "payload": "исходный payload (до change)",
+        "payloadType": "str",
+        "x": 200,
+        "y": 100,
+        "wires": [
+            [
+                "k04change0000001"
+            ]
+        ]
+    },
+    {
+        "id": "k04change0000001",
+        "type": "change",
+        "z": "k04tab0000000001",
+        "name": "Konnov: topic + timestamp + payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "lab2/konnov/change",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "timestamp",
+                "pt": "msg",
+                "to": "$now()",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Konnov SDP-241: payload заменён в change",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 100,
+        "wires": [
+            [
+                "k04debug00000001"
+            ]
+        ]
+    },
+    {
+        "id": "k04debug00000001",
+        "type": "debug",
+        "z": "k04tab0000000001",
+        "name": "debug: полный msg (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 100,
+        "wires": []
+    }
+]

@@ -1,0 +1,150 @@
+[
+    {
+        "id": "k03tab0000000001",
+        "type": "tab",
+        "label": "03 Konnov SDP-241 | Switch",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.3. Автор: Коннов, СДП-241 ИИ. inject -> function -> switch (по msg.payload.passed) -> два debug."
+    },
+    {
+        "id": "k03injectgood001",
+        "type": "inject",
+        "z": "k03tab0000000001",
+        "name": "Konnov: хорошие оценки",
+        "props": [
+            {
+                "p": "payload",
+                "v": "{\"name\":\"Konnov\",\"group\":\"SDP-241\",\"scores\":[5,7,9,4,8,6]}",
+                "vt": "json"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/konnov/switch",
+        "x": 170,
+        "y": 80,
+        "wires": [
+            [
+                "k03function00001"
+            ]
+        ]
+    },
+    {
+        "id": "k03injectbad0001",
+        "type": "inject",
+        "z": "k03tab0000000001",
+        "name": "Konnov: плохие оценки + мусор",
+        "props": [
+            {
+                "p": "payload",
+                "v": "{\"name\":\"Konnov\",\"group\":\"SDP-241\",\"scores\":[3,4,\"x\",2,5]}",
+                "vt": "json"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "lab2/konnov/switch",
+        "x": 190,
+        "y": 140,
+        "wires": [
+            [
+                "k03function00001"
+            ]
+        ]
+    },
+    {
+        "id": "k03function00001",
+        "type": "function",
+        "z": "k03tab0000000001",
+        "name": "Konnov: статистика оценок",
+        "func": "// Лаб. 2, п. 2.2. Коннов, СДП-241 ИИ: статистика по оценкам студента\nconst PASS_AVERAGE = 6; // порог \"зачёта\" по среднему баллу\n\nconst input = msg.payload;\nconst scores = Array.isArray(input.scores) ? input.scores : [];\n\nlet sum = 0;\nlet count = 0;\nlet max = null;\nconst bad = []; // сюда складываем значения, которые не число\n\nfor (let i = 0; i < scores.length; i++) {\n    const value = Number(scores[i]);\n    if (Number.isNaN(value)) {\n        bad.push(scores[i]);\n        continue;\n    }\n    sum += value;\n    count++;\n    if (max === null || value > max) {\n        max = value;\n    }\n}\n\nlet average = 0;\nlet verdict;\nif (count === 0) {\n    verdict = \"нет данных\";\n} else {\n    average = Math.round((sum / count) * 100) / 100;\n    if (average >= PASS_AVERAGE) {\n        verdict = \"зачёт\";\n    } else {\n        verdict = \"не зачёт\";\n    }\n}\n\nconst result = {\n    student: input.name + \" \" + input.group,\n    count: count,\n    sum: sum,\n    max: max,\n    average: average,\n    verdict: verdict,\n    passed: verdict === \"зачёт\",\n    ignored: bad\n};\n\nreturn { payload: result, topic: msg.topic };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 110,
+        "wires": [
+            [
+                "k03switch0000001"
+            ]
+        ]
+    },
+    {
+        "id": "k03switch0000001",
+        "type": "switch",
+        "z": "k03tab0000000001",
+        "name": "Konnov: зачёт?",
+        "property": "payload.passed",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 670,
+        "y": 110,
+        "wires": [
+            [
+                "k03debugpass0001"
+            ],
+            [
+                "k03debugfail0001"
+            ]
+        ]
+    },
+    {
+        "id": "k03debugpass0001",
+        "type": "debug",
+        "z": "k03tab0000000001",
+        "name": "выход 1: зачёт (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "k03debugfail0001",
+        "type": "debug",
+        "z": "k03tab0000000001",
+        "name": "выход 2: не зачёт (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 930,
+        "y": 140,
+        "wires": []
+    }
+]
