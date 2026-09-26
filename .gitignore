@@ -7,3 +7,10 @@ Thumbs.db
 node_modules/
 dist/
 .env
+
+# Lab2: Node-RED (данные контейнера, секреты)
+lab2/nodered-data/
+flows_cred.json
+.config*.json
+*.env
+*.bak
