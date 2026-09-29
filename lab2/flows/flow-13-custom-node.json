@@ -1,0 +1,141 @@
+[
+    {
+        "id": "k13tab0000000001",
+        "type": "tab",
+        "label": "13 Konnov SDP-241 | Custom node (ачивка 12)",
+        "disabled": false,
+        "info": "Ачивка 12. Автор: Коннов, СДП-241 ИИ. Своя нода konnov-email-validator (npm-пакет node-red-contrib-konnov-email-validator, см. lab2/custom-nodes/). Проверка нескольких email через debug и статус ноды."
+    },
+    {
+        "id": "k13injectok0001",
+        "type": "inject",
+        "z": "k13tab0000000001",
+        "name": "Konnov: valid email",
+        "props": [
+            {
+                "p": "payload",
+                "v": "konnov.andrey@grsu.by",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 190,
+        "y": 80,
+        "wires": [
+            [
+                "k13validator0001"
+            ]
+        ]
+    },
+    {
+        "id": "k13injectbad0001",
+        "type": "inject",
+        "z": "k13tab0000000001",
+        "name": "Konnov: без @",
+        "props": [
+            {
+                "p": "payload",
+                "v": "konnov.andrey-grsu.by",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 190,
+        "y": 140,
+        "wires": [
+            [
+                "k13validator0001"
+            ]
+        ]
+    },
+    {
+        "id": "k13injectspace01",
+        "type": "inject",
+        "z": "k13tab0000000001",
+        "name": "Konnov: с пробелами (trim)",
+        "props": [
+            {
+                "p": "payload",
+                "v": "  konnov@example.com  ",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 190,
+        "y": 200,
+        "wires": [
+            [
+                "k13validator0001"
+            ]
+        ]
+    },
+    {
+        "id": "k13injectempty01",
+        "type": "inject",
+        "z": "k13tab0000000001",
+        "name": "Konnov: пустая строка",
+        "props": [
+            {
+                "p": "payload",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 190,
+        "y": 260,
+        "wires": [
+            [
+                "k13validator0001"
+            ]
+        ]
+    },
+    {
+        "id": "k13validator0001",
+        "type": "konnov-email-validator",
+        "z": "k13tab0000000001",
+        "name": "Konnov: проверка email",
+        "property": "payload",
+        "trim": true,
+        "x": 470,
+        "y": 170,
+        "wires": [
+            [
+                "k13debug0000001"
+            ]
+        ]
+    },
+    {
+        "id": "k13debug0000001",
+        "type": "debug",
+        "z": "k13tab0000000001",
+        "name": "debug: msg.valid + payload (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 730,
+        "y": 170,
+        "wires": []
+    }
+]
