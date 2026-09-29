@@ -1,0 +1,94 @@
+[
+    {
+        "id": "k12tab0000000001",
+        "type": "tab",
+        "label": "12 Konnov SDP-241 | Context",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.12. Автор: Коннов, СДП-241 ИИ. Счётчик в flow context (persist через localfilesystem, см. docs/context-storage.md). Проверка: несколько +1, затем podman restart nodered-konnov, затем снова +1 — счётчик не должен обнулиться."
+    },
+    {
+        "id": "k12injectinc0001",
+        "type": "inject",
+        "z": "k12tab0000000001",
+        "name": "Konnov: +1",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "increment",
+        "x": 160,
+        "y": 80,
+        "wires": [
+            [
+                "k12function00001"
+            ]
+        ]
+    },
+    {
+        "id": "k12injectrst0001",
+        "type": "inject",
+        "z": "k12tab0000000001",
+        "name": "Konnov: сброс",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "reset",
+        "x": 160,
+        "y": 140,
+        "wires": [
+            [
+                "k12function00001"
+            ]
+        ]
+    },
+    {
+        "id": "k12function00001",
+        "type": "function",
+        "z": "k12tab0000000001",
+        "name": "Konnov: счётчик (flow context)",
+        "func": "// Лаб. 2, п. 2.12. Коннов, СДП-241 ИИ: счётчик в flow context, переживающий podman restart\n// (contextStorage настроен на localfilesystem, см. lab2/docs/context-storage.md)\nconst COUNTER_KEY = \"konnovCounter\";\n\nlet counter = flow.get(COUNTER_KEY);\nif (typeof counter !== \"number\") {\n    counter = 0;\n}\n\nif (msg.topic === \"reset\") {\n    counter = 0;\n} else {\n    counter = counter + 1;\n}\n\nflow.set(COUNTER_KEY, counter);\n\nmsg.payload = {\n    action: msg.topic || \"increment\",\n    counter: counter,\n    student: \"Konnov SDP-241\"\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 110,
+        "wires": [
+            [
+                "k12debug00000001"
+            ]
+        ]
+    },
+    {
+        "id": "k12debug00000001",
+        "type": "debug",
+        "z": "k12tab0000000001",
+        "name": "debug: значение счётчика (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 110,
+        "wires": []
+    }
+]

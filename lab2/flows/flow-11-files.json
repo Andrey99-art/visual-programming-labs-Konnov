@@ -1,0 +1,128 @@
+[
+    {
+        "id": "k11tab0000000001",
+        "type": "tab",
+        "label": "11 Konnov SDP-241 | Files",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.11. Автор: Коннов, СДП-241 ИИ. Ветка записи: inject -> function -> file out (append). Ветка чтения: inject -> file in -> debug. Файл: /data/lab2-files/konnov-log.txt"
+    },
+    {
+        "id": "k11injectwrite01",
+        "type": "inject",
+        "z": "k11tab0000000001",
+        "name": "Konnov: записать строку",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 190,
+        "y": 80,
+        "wires": [
+            [
+                "k11funcbuild0001"
+            ]
+        ]
+    },
+    {
+        "id": "k11funcbuild0001",
+        "type": "function",
+        "z": "k11tab0000000001",
+        "name": "Konnov: строка записи + счётчик",
+        "func": "// Лаб. 2, п. 2.11. Коннов, СДП-241 ИИ: формируем строку записи для лог-файла\nconst STUDENT = \"Konnov\";\nconst GROUP = \"SDP-241\";\n\nconst now = new Date();\nconst record = {\n    ts: now.toISOString(),\n    student: STUDENT,\n    group: GROUP,\n    counter: 0\n};\n\n// счётчик хранится в flow context, чтобы в файле были разные строки при каждом нажатии\nlet counter = flow.get(\"fileWriteCounter\");\nif (typeof counter !== \"number\") {\n    counter = 0;\n}\ncounter = counter + 1;\nflow.set(\"fileWriteCounter\", counter);\nrecord.counter = counter;\n\nlet line = \"\";\nfor (const key in record) {\n    if (line !== \"\") {\n        line += \";\";\n    }\n    line += key + \"=\" + record[key];\n}\n\nmsg.payload = line + \"\\n\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 80,
+        "wires": [
+            [
+                "k11fileout00001"
+            ]
+        ]
+    },
+    {
+        "id": "k11fileout00001",
+        "type": "file",
+        "z": "k11tab0000000001",
+        "name": "Konnov: append -> konnov-log.txt",
+        "filename": "/data/lab2-files/konnov-log.txt",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 720,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "k11injectread001",
+        "type": "inject",
+        "z": "k11tab0000000001",
+        "name": "Konnov: прочитать файл",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 180,
+        "y": 200,
+        "wires": [
+            [
+                "k11filein000001"
+            ]
+        ]
+    },
+    {
+        "id": "k11filein000001",
+        "type": "file in",
+        "z": "k11tab0000000001",
+        "name": "Konnov: read konnov-log.txt",
+        "filename": "/data/lab2-files/konnov-log.txt",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": true,
+        "encoding": "none",
+        "x": 440,
+        "y": 200,
+        "wires": [
+            [
+                "k11debug0000001"
+            ]
+        ]
+    },
+    {
+        "id": "k11debug0000001",
+        "type": "debug",
+        "z": "k11tab0000000001",
+        "name": "debug: содержимое файла (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 200,
+        "wires": []
+    }
+]
