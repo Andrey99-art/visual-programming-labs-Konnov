@@ -1,0 +1,184 @@
+[
+    {
+        "id": "k10tab0000000001",
+        "type": "tab",
+        "label": "10 Konnov SDP-241 | Telegram",
+        "disabled": false,
+        "info": "Лаб. 2, п. 2.10. Автор: Коннов, СДП-241 ИИ. Бот tvl_lab2_konnov_bot: /start, /time, echo. Токен вводится в конфиге ноды 'telegram bot' и в файл не попадает."
+    },
+    {
+        "id": "k10bot000000001",
+        "type": "telegram bot",
+        "botname": "tvl_lab2_konnov_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "addressfamily": "",
+        "pollinterval": "300"
+    },
+    {
+        "id": "k10cmdstart0001",
+        "type": "telegram command",
+        "z": "k10tab0000000001",
+        "name": "Konnov: /start",
+        "command": "/start",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "k10bot000000001",
+        "strict": false,
+        "hasresponse": false,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 1,
+        "x": 160,
+        "y": 80,
+        "wires": [
+            [
+                "k10funcstart001"
+            ]
+        ]
+    },
+    {
+        "id": "k10funcstart001",
+        "type": "function",
+        "z": "k10tab0000000001",
+        "name": "Konnov: ответ на /start",
+        "func": "// /start: приветствие. Коннов, СДП-241 ИИ\nconst p = msg.payload;\nconst name = (p.from && p.from.first_name) ? p.from.first_name : \"друг\";\n\nreturn {\n    payload: {\n        chatId: p.chatId,\n        type: \"message\",\n        content: \"Привет, \" + name + \"! Я tvl_lab2_konnov_bot (Коннов, СДП-241 ИИ, лаб. 2).\\n\" +\n                 \"Команды: /start, /time. Любой другой текст я верну эхом.\"\n    }\n};\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 80,
+        "wires": [
+            [
+                "k10sender000001",
+                "k10debug0000001"
+            ]
+        ]
+    },
+    {
+        "id": "k10cmdtime00001",
+        "type": "telegram command",
+        "z": "k10tab0000000001",
+        "name": "Konnov: /time",
+        "command": "/time",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "k10bot000000001",
+        "strict": false,
+        "hasresponse": false,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 1,
+        "x": 160,
+        "y": 160,
+        "wires": [
+            [
+                "k10functime0001"
+            ]
+        ]
+    },
+    {
+        "id": "k10functime0001",
+        "type": "function",
+        "z": "k10tab0000000001",
+        "name": "Konnov: ответ на /time",
+        "func": "// /time: текущее время сервера в часовом поясе Минска\nconst TIME_ZONE = \"Europe/Minsk\";\nconst p = msg.payload;\nconst now = new Date().toLocaleString(\"ru-RU\", { timeZone: TIME_ZONE });\n\nreturn {\n    payload: {\n        chatId: p.chatId,\n        type: \"message\",\n        content: \"Сейчас (\" + TIME_ZONE + \"): \" + now\n    }\n};\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 160,
+        "wires": [
+            [
+                "k10sender000001",
+                "k10debug0000001"
+            ]
+        ]
+    },
+    {
+        "id": "k10receiver0001",
+        "type": "telegram receiver",
+        "z": "k10tab0000000001",
+        "name": "Konnov: любое сообщение",
+        "bot": "k10bot000000001",
+        "saveDataDir": "",
+        "filterCommands": true,
+        "hasinput": false,
+        "inputs": 0,
+        "handleallupdates": false,
+        "handleprocessupdates": false,
+        "x": 180,
+        "y": 240,
+        "wires": [
+            [
+                "k10funcecho0001"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "k10funcecho0001",
+        "type": "function",
+        "z": "k10tab0000000001",
+        "name": "Konnov: echo",
+        "func": "// echo: отвечаем на любое текстовое сообщение (команды сюда не попадают: включён Filter commands)\nconst p = msg.payload;\nlet text;\n\nif (p.type === \"message\" && typeof p.content === \"string\") {\n    text = \"Konnov SDP-241 echo: \" + p.content;\n} else {\n    text = \"Я умею отвечать эхом только на текст (получен тип: \" + p.type + \")\";\n}\n\nreturn { payload: { chatId: p.chatId, type: \"message\", content: text } };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 240,
+        "wires": [
+            [
+                "k10sender000001",
+                "k10debug0000001"
+            ]
+        ]
+    },
+    {
+        "id": "k10sender000001",
+        "type": "telegram sender",
+        "z": "k10tab0000000001",
+        "name": "Konnov: отправить ответ",
+        "bot": "k10bot000000001",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 720,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "k10debug0000001",
+        "type": "debug",
+        "z": "k10tab0000000001",
+        "name": "debug: исходящий ответ (Konnov)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 220,
+        "wires": []
+    }
+]
