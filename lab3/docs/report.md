@@ -24,12 +24,15 @@ TODO
 
 ## 4. Исследование идеи (часть 2, Build Guides)
 
-- Build Guide 1: TODO (ссылка, что посмотрел, что полезного)
-- Build Guide 2: TODO
+Использован AI-генератор Build Guides (bubble.io/home/buildguides) с описанием идеи: *«Workout planner app where users create personal training plans, add exercises to each workout, schedule sessions by day, mark workouts as completed or skipped, and track overall progress and completion statistics.»*
 
-Что применено в приложении: TODO
+По этому описанию сгенерировался набор из 6 гайдов под тему «Workout Planner»: User signup and login, Add exercises to workouts, **Mark workouts as completed or skipped**, Workout scheduling, Create and manage training plans, Progress tracking and statistics. Скриншот списка: `../screenshots/02-buildguide-list.png`.
 
-Скриншоты: `../screenshots/02-buildguide-*.png`
+Открыт гайд **«Mark workouts as completed or skipped»**. Полезное: рекомендуемая структура данных — Data type `Workout` с полями Title, Description, Scheduled Date, Status, **User**, и отдельный тип `Progress`; явная рекомендация гайда — поле User в обоих типах должно связывать записи с конкретным пользователем для персонализированного трекинга. Скриншот: `../screenshots/02-buildguide-detail.png`.
+
+**Применённая идея:** проверка персонализации данных по пользователю. «До» — вкладка Data в редакторе: у приложения уже есть типы `План Тренировок`, `Тренировка`, `Упражнение` с пометкой «Privacy rules applied» (`../screenshots/02-buildguide-before.png`). «После» — запрос Bubble AI-агенту «Generate data types for User = Current User»: агент подтвердил, что каждый из этих типов уже содержит поле `Владелец` (owner → User) и privacy rule `owner = Current User`, то есть рекомендация гайда («User field ... linking records to the specific user») была реализована AI ещё на этапе генерации каркаса приложения в части 1 (`../screenshots/02-buildguide-after.png`).
+
+Вывод: идея из Build Guide применена — данные в FitPlan изначально спроектированы с персонализацией по владельцу-пользователю, что подтверждено через AI-агента Bubble.
 
 ## 5. Ручная доработка UI (часть 3)
 
