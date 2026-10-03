@@ -79,13 +79,19 @@ TODO
 
 ## 7. Ачивка
 
-Выбрана ачивка: TODO
+Выбрана ачивка: **1. API Connector (CRUD)**.
 
-Описание/демонстрация: TODO
+Подключён внешний API **JSONPlaceholder** (https://jsonplaceholder.typicode.com, из списка public-apis, раздел Test Data) через официальный плагин Bubble **API Connector**. Реализовано 4 эндпоинта на ресурсе `/posts`:
+- **GET** `/posts/1` — получение поста;
+- **POST** `/posts` — создание поста;
+- **PATCH** `/posts/1` — обновление поста;
+- **DELETE** `/posts/1` — удаление поста.
 
-Скриншоты: `../screenshots/11-api-*.png` или `../screenshots/12-plugin-*.png`
+Каждый вызов настроен как отдельное Action в API Connector и вызывается через workflow по клику на соответствующую кнопку (Get Post / Create Post / Update Post / Delete Post) на странице `api-demo`. Все 4 операции проверены в Preview — ответы реального внешнего API (title/body/id, подтверждение удаления) отображаются на странице.
 
-(Документация API — см. `api.md`, если выбрана ачивка 1)
+Полная документация эндпоинтов (параметры, примеры запросов/ответов) — в `api.md`.
+
+Скриншоты: `../screenshots/11-api-setup.png`, `11-api-get.png`, `11-api-post.png`, `11-api-update-setup.png`, `11-api-update-result.png`, `11-api-delete-setup.png`, `11-api-delete-result.png`.
 
 ## 8. Освоенные элементы и концепции
 
