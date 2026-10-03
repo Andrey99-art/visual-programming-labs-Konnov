@@ -8,3 +8,4 @@
 
 - lab1/ - Моделирование процессов с использованием Git и визуальных нотаций
 - lab2/ - Node-RED: low-code потоки, REST-эндпоинты, dashboard, Telegram-бот
+- lab3/ - Bubble: no-code веб-приложение, AI-генерация, Data и Workflows
