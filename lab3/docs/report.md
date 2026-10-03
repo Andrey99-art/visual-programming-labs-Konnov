@@ -66,12 +66,16 @@ TODO
 
 ### 6.2. Workflows (CRUD)
 
-Список workflows: TODO
+Полный CRUD для Achievement реализован на странице `achievements` (создана AI на базе страницы-витрины из части 4.1), каждое действие — отдельный workflow на вкладке Workflow:
 
-Скриншоты:
-- `../screenshots/08-workflow-create.png`
-- `../screenshots/09-workflow-create.png`
-- `../screenshots/10-workflow-delete.png`
+- **Create** — `Form open new achievement`: по клику на «New Achievement Button» сбрасывает и открывает форму (попап). Скриншот: `../screenshots/08-workflow-create.png`.
+- **Create/Update** — `Form save`: по клику на Create Button — Step 1 создаёт новую запись Achievement, если форма пуста, либо Step 2 вносит изменения в существующую запись (если форма заполнена данными и текущий пользователь — владелец записи); дальше скрывает попап и сбрасывает поля. Скриншот: `../screenshots/09-workflow-create.png`.
+- **Update** — `Form open edit` (загружает ачивку в форму для редактирования), `Unlock`/`Lock` (быстрое переключение поля Is Unlocked, Unlock дополнительно проставляет Date Earned).
+- **Delete** — `Del ask delete` (по клику на Delete Button, только если текущий пользователь — владелец, показывает попап подтверждения с данными записи) → `Del confirm` (подтверждение — выполняет удаление записи). Скриншот (экран подтверждения): `../screenshots/10-workflow-delete.png`.
+- **Read** — не отдельный workflow, а Data source репитинг-группы `Achievements List`: поиск записей Achievement с фильтром по Owner = Current User (приватность по пользователю реализована).
+- Вспомогательные: `Form cancel`/`Del cancel` (закрытие попапов), `Page is loaded`, `Signed-out visitor goes to...` (редирект незалогиненных).
+
+Проверено в Preview: создание, редактирование (Lock/Unlock) и удаление записи работают.
 
 ## 7. Ачивка
 
