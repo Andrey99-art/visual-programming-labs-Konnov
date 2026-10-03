@@ -37,18 +37,16 @@ TODO
 ## 5. Ручная доработка UI (часть 3)
 
 ### 5.1. Заголовок на странице Design
-TODO
+Вручную (без ИИ) в Design-редакторе отредактирован текст заголовка в шапке приложения: было «FitPlan — ТВП: Konnov» (сгенерировано AI в части 1), стало «Anatolevich FitPlan» — добавлено имя студента. Скриншот: `../screenshots/03-header-title.png`.
 
 ### 5.2. Global variable (цвет)
-Имя переменной: TODO
-Скриншот: `../screenshots/03-global-variable.png`
+Создана Global Variable типа Color с именем `primary-color`, применена к фону кнопки «Создать аккаунт» (стала красной). Скриншот: `../screenshots/03-global-variable.png`.
 
 ### 5.3. Стиль на основе Global variable
-Скриншот: `../screenshots/04-style.png`
+Создан новый Style с именем **Primary Style**, цвет в настройках стиля ссылается на Global Variable `primary-color` (а не задан напрямую), применён к элементу на странице. Скриншот: `../screenshots/04-style.png`.
 
 ### 5.4. Drag & drop компонент
-Компонент: TODO
-Скриншот: `../screenshots/05-component.png`
+Через drag & drop на страницу добавлена карточка формы логина (поля Email/Password, кнопка Log In, ссылка Create a new account) с фоновым изображением на спортивную тематику — компонента, которого раньше на странице не было. Оставлена в текущем виде (английский текст, фото-заглушка) как финальный вариант. Скриншот: `../screenshots/05-component.png`.
 
 ## 6. Data и Workflows (часть 4)
 
