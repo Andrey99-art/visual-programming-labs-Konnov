@@ -52,15 +52,17 @@ TODO
 
 ### 6.1. Data
 
-Промпт для генерации сущности (дословно):
+Промпт для генерации сущности (дословно, в чат Bubble AI Agent):
 
-> TODO
+> Create a new data type called "Achievement" for a workout tracking app. Fields: Title (text), Date Earned (date), Is Unlocked (yes/no), Related Workout (link to Тренировка), Description (text).
 
-Название сущности и поля: TODO
+Название сущности: **Achievement**. Поля: `Title` (text), `Date Earned` (date), `Is Unlocked` (yes/no), `Related Workout` (link → Тренировка), `Description` (text), плюс служебное `Owner` (User, для приватности по аналогии с остальными типами данных приложения) и встроенные Creator/Modified Date/Created Date/Slug. Структура — скриншот `../screenshots/06-data-type.png`.
 
-Скриншоты:
-- `../screenshots/06-data-type.png`
-- `../screenshots/07-data-records.png`
+Вручную через **App Data** добавлено 2 записи типа Achievement:
+- «First Workout Complete» — Is Unlocked: yes, Related Workout: Let The War…
+- «Perform a 10-punch combination» — Is Unlocked: no, Related Workout: Manilla Ice…
+
+Скриншот записей (вкладка App Data): `../screenshots/07-data-records.png`.
 
 ### 6.2. Workflows (CRUD)
 
